@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Team Role Quiz</title>
+
+<style>
+body{
+font-family: Arial;
+max-width:700px;
+margin:auto;
+padding:20px;
+}
+
+.question{
+margin-bottom:25px;
+}
+
+button{
+padding:10px 20px;
+font-size:16px;
+cursor:pointer;
+}
+
+#result{
+margin-top:30px;
+font-size:22px;
+font-weight:bold;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>What role do you play in a team?</h2>
+
+<div class="question">
+<p>1. When starting a project I usually...</p>
+
+<label>
+<input type="radio" name="q1" value="creator">
+suggest new ideas
+</label><br>
+
+<label>
+<input type="radio" name="q1" value="analyst">
+analyze the situation
+</label><br>
+
+<label>
+<input type="radio" name="q1" value="connector">
+make sure everyone collaborates
+</label><br>
+
+<label>
+<input type="radio" name="q1" value="maker">
+focus on executing tasks
+</label>
+
+</div>
+
+<div class="question">
+<p>2. When problems appear...</p>
+
+<label>
+<input type="radio" name="q2" value="creator">
+I brainstorm alternatives
+</label><br>
+
+<label>
+<input type="radio" name="q2" value="analyst">
+I evaluate options carefully
+</label><br>
+
+<label>
+<input type="radio" name="q2" value="connector">
+I help people align
+</label><br>
+
+<label>
+<input type="radio" name="q2" value="maker">
+I take action immediately
+</label>
+
+</div>
+
+<button onclick="calculate()">See my role</button>
+
+<div id="result"></div>
+
+<script>
+
+function calculate(){
+
+let scores={
+creator:0,
+analyst:0,
+connector:0,
+maker:0
+};
+
+document.querySelectorAll("input:checked").forEach(el=>{
+scores[el.value]++;
+});
+
+let role=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
+
+let resultText={
+creator:"Creator – you bring ideas and innovation to the team.",
+analyst:"Analyst – you evaluate options and think strategically.",
+connector:"Connector – you help people collaborate and communicate.",
+maker:"Maker – you focus on execution and getting things done."
+};
+
+document.getElementById("result").innerText=resultText[role];
+
+}
+
+</script>
+
+</body>
+</html>
