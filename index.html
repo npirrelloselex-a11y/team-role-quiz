@@ -8,69 +8,83 @@
 
 body{
 font-family: Arial, sans-serif;
-background:#f4f6f8;
+background:#f3f5f8;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 margin:0;
-padding:40px;
 }
 
 .container{
-max-width:750px;
-margin:auto;
+width:600px;
 background:white;
 padding:40px;
-border-radius:10px;
-box-shadow:0 6px 18px rgba(0,0,0,0.08);
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+text-align:center;
 }
 
-h1{
-text-align:center;
+.progress{
+height:8px;
+background:#e4e6eb;
+border-radius:10px;
 margin-bottom:30px;
+overflow:hidden;
+}
+
+.progress-bar{
+height:8px;
+background:#4a6cf7;
+width:0%;
+transition:0.3s;
 }
 
 .question{
+font-size:22px;
 margin-bottom:25px;
-padding:20px;
-border:1px solid #eee;
-border-radius:8px;
 }
 
-label{
+.options button{
 display:block;
-margin:8px 0;
-cursor:pointer;
-}
-
-button{
-display:block;
-margin:auto;
-margin-top:30px;
-padding:12px 25px;
-font-size:16px;
+width:100%;
+margin:10px 0;
+padding:14px;
 border:none;
-background:#4a6cf7;
-color:white;
-border-radius:6px;
+border-radius:8px;
+background:#f4f6fb;
 cursor:pointer;
+font-size:16px;
+transition:0.2s;
 }
 
-button:hover{
-background:#3a55c5;
+.options button:hover{
+background:#e9edff;
 }
 
-#resultPage{
+.result{
 display:none;
-text-align:center;
 }
 
 .role{
-font-size:28px;
-margin-top:20px;
+font-size:32px;
 color:#4a6cf7;
+margin-top:20px;
 }
 
 .description{
-margin-top:10px;
 font-size:18px;
+margin-top:10px;
+}
+
+.restart{
+margin-top:30px;
+padding:12px 20px;
+background:#4a6cf7;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
 }
 
 </style>
@@ -78,78 +92,90 @@ font-size:18px;
 
 <body>
 
-<div class="container" id="quizPage">
+<div class="container">
 
-<h1>What Role Do You Play in a Team?</h1>
+<div class="progress">
+<div class="progress-bar" id="progressBar"></div>
+</div>
 
-<div class="question">
-<p><b>1. When starting a project you usually...</b></p>
+<div id="quiz">
 
-<label><input type="radio" name="q1" value="creator"> suggest creative ideas</label>
-<label><input type="radio" name="q1" value="analyst"> analyze the situation</label>
-<label><input type="radio" name="q1" value="connector"> bring people together</label>
-<label><input type="radio" name="q1" value="driver"> start organizing tasks</label>
+<div class="question" id="questionText"></div>
+
+<div class="options" id="options"></div>
 
 </div>
 
-<div class="question">
-<p><b>2. In meetings you tend to...</b></p>
+<div class="result" id="result">
 
-<label><input type="radio" name="q2" value="creator"> propose new possibilities</label>
-<label><input type="radio" name="q2" value="analyst"> ask critical questions</label>
-<label><input type="radio" name="q2" value="connector"> ensure everyone participates</label>
-<label><input type="radio" name="q2" value="driver"> push the team forward</label>
-
-</div>
-
-<div class="question">
-<p><b>3. When conflict appears...</b></p>
-
-<label><input type="radio" name="q3" value="creator"> think of alternative solutions</label>
-<label><input type="radio" name="q3" value="analyst"> evaluate facts carefully</label>
-<label><input type="radio" name="q3" value="connector"> mediate between people</label>
-<label><input type="radio" name="q3" value="driver"> focus on solving it quickly</label>
-
-</div>
-
-<div class="question">
-<p><b>4. Your teammates value you because you...</b></p>
-
-<label><input type="radio" name="q4" value="creator"> bring innovation</label>
-<label><input type="radio" name="q4" value="analyst"> bring clarity and logic</label>
-<label><input type="radio" name="q4" value="connector"> create a good atmosphere</label>
-<label><input type="radio" name="q4" value="driver"> get things done</label>
-
-</div>
-
-<div class="question">
-<p><b>5. If the team is stuck you...</b></p>
-
-<label><input type="radio" name="q5" value="creator"> suggest bold new ideas</label>
-<label><input type="radio" name="q5" value="analyst"> analyze what went wrong</label>
-<label><input type="radio" name="q5" value="connector"> encourage collaboration</label>
-<label><input type="radio" name="q5" value="driver"> take action immediately</label>
-
-</div>
-
-<button onclick="calculate()">See my result</button>
-
-</div>
-
-
-<div class="container" id="resultPage">
-
-<h1>Your Team Role</h1>
+<h2>Your Team Role</h2>
 
 <div class="role" id="roleTitle"></div>
 
 <div class="description" id="roleDesc"></div>
 
+<button class="restart" onclick="restartQuiz()">Restart quiz</button>
+
+</div>
+
 </div>
 
 <script>
 
-function calculate(){
+const questions=[
+{
+q:"When starting a project you usually...",
+options:[
+["Suggest creative ideas","creator"],
+["Analyze the situation","analyst"],
+["Bring people together","connector"],
+["Start organizing tasks","driver"]
+]
+},
+
+{
+q:"In meetings you tend to...",
+options:[
+["Propose new possibilities","creator"],
+["Ask critical questions","analyst"],
+["Ensure everyone participates","connector"],
+["Push the team forward","driver"]
+]
+},
+
+{
+q:"When conflict appears...",
+options:[
+["Think of alternative solutions","creator"],
+["Evaluate facts carefully","analyst"],
+["Mediate between people","connector"],
+["Solve it quickly","driver"]
+]
+},
+
+{
+q:"Your teammates value you because you...",
+options:[
+["Bring innovation","creator"],
+["Bring clarity and logic","analyst"],
+["Create a positive atmosphere","connector"],
+["Get things done","driver"]
+]
+},
+
+{
+q:"If the team gets stuck you...",
+options:[
+["Suggest bold new ideas","creator"],
+["Analyze what went wrong","analyst"],
+["Encourage collaboration","connector"],
+["Take action immediately","driver"]
+]
+}
+
+];
+
+let currentQuestion=0;
 
 let scores={
 creator:0,
@@ -158,26 +184,99 @@ connector:0,
 driver:0
 };
 
-document.querySelectorAll("input:checked").forEach(el=>{
-scores[el.value]++;
+function loadQuestion(){
+
+const q=questions[currentQuestion];
+
+document.getElementById("questionText").innerText=q.q;
+
+const optionsDiv=document.getElementById("options");
+
+optionsDiv.innerHTML="";
+
+q.options.forEach(opt=>{
+
+let btn=document.createElement("button");
+
+btn.innerText=opt[0];
+
+btn.onclick=()=>selectOption(opt[1]);
+
+optionsDiv.appendChild(btn);
+
 });
+
+updateProgress();
+
+}
+
+function selectOption(role){
+
+scores[role]++;
+
+currentQuestion++;
+
+if(currentQuestion<questions.length){
+
+loadQuestion();
+
+}else{
+
+showResult();
+
+}
+
+}
+
+function updateProgress(){
+
+let progress=(currentQuestion/questions.length)*100;
+
+document.getElementById("progressBar").style.width=progress+"%";
+
+}
+
+function showResult(){
+
+document.getElementById("quiz").style.display="none";
+
+document.getElementById("result").style.display="block";
 
 let role=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
 
-let descriptions={
-creator:["Creator","You bring innovation and fresh ideas to the team."],
+const descriptions={
+
+creator:["Creator","You bring innovation and new ideas to the team."],
+
 analyst:["Analyst","You evaluate options carefully and think strategically."],
-connector:["Connector","You build relationships and keep the team aligned."],
-driver:["Driver","You focus on action and making things happen."]
+
+connector:["Connector","You strengthen collaboration and relationships."],
+
+driver:["Driver","You push the team to act and achieve results."]
+
 };
 
-document.getElementById("quizPage").style.display="none";
-document.getElementById("resultPage").style.display="block";
-
 document.getElementById("roleTitle").innerText=descriptions[role][0];
+
 document.getElementById("roleDesc").innerText=descriptions[role][1];
 
 }
+
+function restartQuiz(){
+
+currentQuestion=0;
+
+scores={creator:0,analyst:0,connector:0,driver:0};
+
+document.getElementById("result").style.display="none";
+
+document.getElementById("quiz").style.display="block";
+
+loadQuestion();
+
+}
+
+loadQuestion();
 
 </script>
 
