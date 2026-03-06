@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
 <head>
 <meta charset="UTF-8">
@@ -96,7 +95,6 @@ background:#4969e0;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -108,11 +106,8 @@ background:#4969e0;
 </div>
 
 <div id="quiz">
-
 <div class="question" id="questionText"></div>
-
 <div class="options" id="options"></div>
-
 </div>
 
 <div class="result" id="result">
@@ -120,7 +115,6 @@ background:#4969e0;
 <h2>Your Team Role</h2>
 
 <div class="role" id="roleTitle"></div>
-
 <div class="description" id="roleDesc"></div>
 
 <button class="restart" onclick="restartQuiz()">Restart quiz</button>
@@ -150,7 +144,6 @@ options:[
 ["Ask critical questions","analyst"],
 ["Ensure everyone participates","connector"],
 ["Push the team forward","driver"]
-]
 ]
 },
 
@@ -250,7 +243,6 @@ document.getElementById("progressBar").style.width=progress+"%";
 function showResult(){
 
 document.getElementById("quiz").style.display="none";
-
 document.getElementById("result").style.display="block";
 
 let role=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
@@ -258,17 +250,13 @@ let role=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
 const descriptions={
 
 creator:["Creator","You bring innovation and fresh ideas to the team."],
-
 analyst:["Analyst","You evaluate options carefully and think strategically."],
-
 connector:["Connector","You strengthen collaboration and relationships."],
-
 driver:["Driver","You push the team to act and achieve results."]
 
 };
 
 document.getElementById("roleTitle").innerText=descriptions[role][0];
-
 document.getElementById("roleDesc").innerText=descriptions[role][1];
 
 }
@@ -280,7 +268,6 @@ currentQuestion=0;
 scores={creator:0,analyst:0,connector:0,driver:0};
 
 document.getElementById("result").style.display="none";
-
 document.getElementById("quiz").style.display="block";
 
 loadQuestion();
