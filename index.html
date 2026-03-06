@@ -5,89 +5,147 @@
 <title>Team Role Quiz</title>
 
 <style>
+
 body{
-font-family: Arial;
-max-width:700px;
+font-family: Arial, sans-serif;
+background:#f4f6f8;
+margin:0;
+padding:40px;
+}
+
+.container{
+max-width:750px;
 margin:auto;
-padding:20px;
+background:white;
+padding:40px;
+border-radius:10px;
+box-shadow:0 6px 18px rgba(0,0,0,0.08);
+}
+
+h1{
+text-align:center;
+margin-bottom:30px;
 }
 
 .question{
 margin-bottom:25px;
+padding:20px;
+border:1px solid #eee;
+border-radius:8px;
 }
 
-button{
-padding:10px 20px;
-font-size:16px;
+label{
+display:block;
+margin:8px 0;
 cursor:pointer;
 }
 
-#result{
+button{
+display:block;
+margin:auto;
 margin-top:30px;
-font-size:22px;
-font-weight:bold;
+padding:12px 25px;
+font-size:16px;
+border:none;
+background:#4a6cf7;
+color:white;
+border-radius:6px;
+cursor:pointer;
 }
-</style>
 
+button:hover{
+background:#3a55c5;
+}
+
+#resultPage{
+display:none;
+text-align:center;
+}
+
+.role{
+font-size:28px;
+margin-top:20px;
+color:#4a6cf7;
+}
+
+.description{
+margin-top:10px;
+font-size:18px;
+}
+
+</style>
 </head>
 
 <body>
 
-<h2>What role do you play in a team?</h2>
+<div class="container" id="quizPage">
+
+<h1>What Role Do You Play in a Team?</h1>
 
 <div class="question">
-<p>1. When starting a project I usually...</p>
+<p><b>1. When starting a project you usually...</b></p>
 
-<label>
-<input type="radio" name="q1" value="creator">
-suggest new ideas
-</label><br>
-
-<label>
-<input type="radio" name="q1" value="analyst">
-analyze the situation
-</label><br>
-
-<label>
-<input type="radio" name="q1" value="connector">
-make sure everyone collaborates
-</label><br>
-
-<label>
-<input type="radio" name="q1" value="maker">
-focus on executing tasks
-</label>
+<label><input type="radio" name="q1" value="creator"> suggest creative ideas</label>
+<label><input type="radio" name="q1" value="analyst"> analyze the situation</label>
+<label><input type="radio" name="q1" value="connector"> bring people together</label>
+<label><input type="radio" name="q1" value="driver"> start organizing tasks</label>
 
 </div>
 
 <div class="question">
-<p>2. When problems appear...</p>
+<p><b>2. In meetings you tend to...</b></p>
 
-<label>
-<input type="radio" name="q2" value="creator">
-I brainstorm alternatives
-</label><br>
-
-<label>
-<input type="radio" name="q2" value="analyst">
-I evaluate options carefully
-</label><br>
-
-<label>
-<input type="radio" name="q2" value="connector">
-I help people align
-</label><br>
-
-<label>
-<input type="radio" name="q2" value="maker">
-I take action immediately
-</label>
+<label><input type="radio" name="q2" value="creator"> propose new possibilities</label>
+<label><input type="radio" name="q2" value="analyst"> ask critical questions</label>
+<label><input type="radio" name="q2" value="connector"> ensure everyone participates</label>
+<label><input type="radio" name="q2" value="driver"> push the team forward</label>
 
 </div>
 
-<button onclick="calculate()">See my role</button>
+<div class="question">
+<p><b>3. When conflict appears...</b></p>
 
-<div id="result"></div>
+<label><input type="radio" name="q3" value="creator"> think of alternative solutions</label>
+<label><input type="radio" name="q3" value="analyst"> evaluate facts carefully</label>
+<label><input type="radio" name="q3" value="connector"> mediate between people</label>
+<label><input type="radio" name="q3" value="driver"> focus on solving it quickly</label>
+
+</div>
+
+<div class="question">
+<p><b>4. Your teammates value you because you...</b></p>
+
+<label><input type="radio" name="q4" value="creator"> bring innovation</label>
+<label><input type="radio" name="q4" value="analyst"> bring clarity and logic</label>
+<label><input type="radio" name="q4" value="connector"> create a good atmosphere</label>
+<label><input type="radio" name="q4" value="driver"> get things done</label>
+
+</div>
+
+<div class="question">
+<p><b>5. If the team is stuck you...</b></p>
+
+<label><input type="radio" name="q5" value="creator"> suggest bold new ideas</label>
+<label><input type="radio" name="q5" value="analyst"> analyze what went wrong</label>
+<label><input type="radio" name="q5" value="connector"> encourage collaboration</label>
+<label><input type="radio" name="q5" value="driver"> take action immediately</label>
+
+</div>
+
+<button onclick="calculate()">See my result</button>
+
+</div>
+
+
+<div class="container" id="resultPage">
+
+<h1>Your Team Role</h1>
+
+<div class="role" id="roleTitle"></div>
+
+<div class="description" id="roleDesc"></div>
+
+</div>
 
 <script>
 
@@ -97,7 +155,7 @@ let scores={
 creator:0,
 analyst:0,
 connector:0,
-maker:0
+driver:0
 };
 
 document.querySelectorAll("input:checked").forEach(el=>{
@@ -106,14 +164,18 @@ scores[el.value]++;
 
 let role=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
 
-let resultText={
-creator:"Creator – you bring ideas and innovation to the team.",
-analyst:"Analyst – you evaluate options and think strategically.",
-connector:"Connector – you help people collaborate and communicate.",
-maker:"Maker – you focus on execution and getting things done."
+let descriptions={
+creator:["Creator","You bring innovation and fresh ideas to the team."],
+analyst:["Analyst","You evaluate options carefully and think strategically."],
+connector:["Connector","You build relationships and keep the team aligned."],
+driver:["Driver","You focus on action and making things happen."]
 };
 
-document.getElementById("result").innerText=resultText[role];
+document.getElementById("quizPage").style.display="none";
+document.getElementById("resultPage").style.display="block";
+
+document.getElementById("roleTitle").innerText=descriptions[role][0];
+document.getElementById("roleDesc").innerText=descriptions[role][1];
 
 }
 
