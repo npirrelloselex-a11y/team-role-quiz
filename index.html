@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
@@ -8,7 +9,7 @@
 
 body{
 font-family: Arial, sans-serif;
-background:#f3f5f8;
+background: linear-gradient(135deg,#6a8dff,#9ed0ff);
 display:flex;
 justify-content:center;
 align-items:center;
@@ -19,9 +20,9 @@ margin:0;
 .container{
 width:600px;
 background:white;
-padding:40px;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.08);
+padding:45px;
+border-radius:14px;
+box-shadow:0 15px 40px rgba(0,0,0,0.15);
 text-align:center;
 }
 
@@ -35,9 +36,9 @@ overflow:hidden;
 
 .progress-bar{
 height:8px;
-background:#4a6cf7;
+background:linear-gradient(90deg,#5a7cff,#7ed4ff);
 width:0%;
-transition:0.3s;
+transition:0.4s;
 }
 
 .question{
@@ -48,18 +49,19 @@ margin-bottom:25px;
 .options button{
 display:block;
 width:100%;
-margin:10px 0;
-padding:14px;
+margin:12px 0;
+padding:16px;
 border:none;
-border-radius:8px;
-background:#f4f6fb;
+border-radius:10px;
+background:#eef2ff;
 cursor:pointer;
-font-size:16px;
-transition:0.2s;
+font-size:17px;
+transition:0.25s;
 }
 
 .options button:hover{
-background:#e9edff;
+background:#dce4ff;
+transform:scale(1.02);
 }
 
 .result{
@@ -67,9 +69,10 @@ display:none;
 }
 
 .role{
-font-size:32px;
-color:#4a6cf7;
+font-size:34px;
+color:#5a7cff;
 margin-top:20px;
+font-weight:bold;
 }
 
 .description{
@@ -79,15 +82,21 @@ margin-top:10px;
 
 .restart{
 margin-top:30px;
-padding:12px 20px;
-background:#4a6cf7;
+padding:12px 22px;
+background:#5a7cff;
 color:white;
 border:none;
-border-radius:6px;
+border-radius:8px;
 cursor:pointer;
+font-size:16px;
+}
+
+.restart:hover{
+background:#4969e0;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -123,6 +132,7 @@ cursor:pointer;
 <script>
 
 const questions=[
+
 {
 q:"When starting a project you usually...",
 options:[
@@ -140,6 +150,7 @@ options:[
 ["Ask critical questions","analyst"],
 ["Ensure everyone participates","connector"],
 ["Push the team forward","driver"]
+]
 ]
 },
 
@@ -246,7 +257,7 @@ let role=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
 
 const descriptions={
 
-creator:["Creator","You bring innovation and new ideas to the team."],
+creator:["Creator","You bring innovation and fresh ideas to the team."],
 
 analyst:["Analyst","You evaluate options carefully and think strategically."],
 
