@@ -1,280 +1,161 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Team Role Quiz</title>
 
 <style>
-
 body{
 font-family: Arial, sans-serif;
-background: linear-gradient(135deg,#6a8dff,#9ed0ff);
+background:#f2f5ff;
 display:flex;
 justify-content:center;
 align-items:center;
-min-height:600px;;
+height:100vh;
 margin:0;
 }
 
-.container{
-width:600px;
+.quiz-box{
 background:white;
-padding:45px;
-border-radius:14px;
-box-shadow:0 15px 40px rgba(0,0,0,0.15);
-text-align:center;
+padding:30px;
+border-radius:12px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+width:90%;
+max-width:500px;
 }
 
-.progress{
-height:8px;
-background:#e4e6eb;
-border-radius:10px;
-margin-bottom:30px;
-overflow:hidden;
+h2{
+margin-bottom:20px;
 }
 
-.progress-bar{
-height:8px;
-background:linear-gradient(90deg,#5a7cff,#7ed4ff);
-width:0%;
-transition:0.4s;
-}
-
-.question{
-font-size:22px;
-margin-bottom:25px;
-}
-
-.options button{
+button{
 display:block;
 width:100%;
-margin:12px 0;
-padding:16px;
-border:none;
-border-radius:10px;
-background:#eef2ff;
-cursor:pointer;
-font-size:17px;
-transition:0.25s;
-}
-
-.options button:hover{
-background:#dce4ff;
-transform:scale(1.02);
-}
-
-.result{
-display:none;
-}
-
-.role{
-font-size:34px;
-color:#5a7cff;
-margin-top:20px;
-font-weight:bold;
-}
-
-.description{
-font-size:18px;
-margin-top:10px;
-}
-
-.restart{
-margin-top:30px;
-padding:12px 22px;
-background:#5a7cff;
-color:white;
+padding:12px;
+margin:8px 0;
 border:none;
 border-radius:8px;
-cursor:pointer;
+background:#5a7cff;
+color:white;
 font-size:16px;
+cursor:pointer;
 }
 
-.restart:hover{
-background:#4969e0;
+button:hover{
+background:#3f5ce0;
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="quiz-box">
 
-<div class="progress">
-<div class="progress-bar" id="progressBar"></div>
-</div>
-
-<div id="quiz">
-<div class="question" id="questionText"></div>
-<div class="options" id="options"></div>
-</div>
-
-<div class="result" id="result">
-
-<h2>Your Team Role</h2>
-
-<div class="role" id="roleTitle"></div>
-<div class="description" id="roleDesc"></div>
-
-<button class="restart" onclick="restartQuiz()">Restart quiz</button>
-
-</div>
+<h2 id="question">Loading...</h2>
+<div id="answers"></div>
 
 </div>
 
 <script>
 
-const questions=[
-
+const quiz = [
 {
-q:"When starting a project you usually...",
-options:[
-["Suggest creative ideas","creator"],
-["Analyze the situation","analyst"],
-["Bring people together","connector"],
-["Start organizing tasks","driver"]
+q:"When working in a team you usually...",
+a:[
+["Organize tasks and deadlines","coordinator"],
+["Generate creative ideas","innovator"],
+["Keep people motivated","motivator"],
+["Check details and quality","finisher"]
 ]
 },
-
 {
-q:"In meetings you tend to...",
-options:[
-["Propose new possibilities","creator"],
-["Ask critical questions","analyst"],
-["Ensure everyone participates","connector"],
-["Push the team forward","driver"]
+q:"If the team is stuck you...",
+a:[
+["Suggest a new approach","innovator"],
+["Encourage everyone to keep going","motivator"],
+["Structure the work better","coordinator"],
+["Review what might be wrong","finisher"]
 ]
 },
-
-{
-q:"When conflict appears...",
-options:[
-["Think of alternative solutions","creator"],
-["Evaluate facts carefully","analyst"],
-["Mediate between people","connector"],
-["Solve it quickly","driver"]
-]
-},
-
 {
 q:"Your teammates value you because you...",
-options:[
-["Bring innovation","creator"],
-["Bring clarity and logic","analyst"],
-["Create a positive atmosphere","connector"],
-["Get things done","driver"]
+a:[
+["Bring creative thinking","innovator"],
+["Keep the team organized","coordinator"],
+["Make sure everything is done well","finisher"],
+["Boost the team's energy","motivator"]
 ]
 },
-
 {
-q:"If the team gets stuck you...",
-options:[
-["Suggest bold new ideas","creator"],
-["Analyze what went wrong","analyst"],
-["Encourage collaboration","connector"],
-["Take action immediately","driver"]
+q:"When a deadline approaches you...",
+a:[
+["Make sure everyone knows their task","coordinator"],
+["Focus on perfecting the details","finisher"],
+["Help the team stay positive","motivator"],
+["Propose faster solutions","innovator"]
+]
+},
+{
+q:"In group discussions you usually...",
+a:[
+["Bring new ideas","innovator"],
+["Guide the conversation","coordinator"],
+["Support teammates","motivator"],
+["Check practicality","finisher"]
 ]
 }
+]
 
-];
-
-let currentQuestion=0;
-
+let index=0
 let scores={
-creator:0,
-analyst:0,
-connector:0,
-driver:0
-};
+coordinator:0,
+innovator:0,
+motivator:0,
+finisher:0
+}
 
 function loadQuestion(){
+const q=quiz[index]
+document.getElementById("question").innerText=q.q
 
-const q=questions[currentQuestion];
+const answers=document.getElementById("answers")
+answers.innerHTML=""
 
-document.getElementById("questionText").innerText=q.q;
-
-const optionsDiv=document.getElementById("options");
-
-optionsDiv.innerHTML="";
-
-q.options.forEach(opt=>{
-
-let btn=document.createElement("button");
-
-btn.innerText=opt[0];
-
-btn.onclick=()=>selectOption(opt[1]);
-
-optionsDiv.appendChild(btn);
-
-});
-
-updateProgress();
-
+q.a.forEach(answer=>{
+const btn=document.createElement("button")
+btn.innerText=answer[0]
+btn.onclick=()=>select(answer[1])
+answers.appendChild(btn)
+})
 }
 
-function selectOption(role){
+function select(role){
+scores[role]++
+index++
 
-scores[role]++;
-
-currentQuestion++;
-
-if(currentQuestion<questions.length){
-
-loadQuestion();
-
+if(index<quiz.length){
+loadQuestion()
 }else{
-
-showResult();
-
+finish()
+}
 }
 
+function finish(){
+
+let topRole=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b)
+
+const results={
+coordinator:"Coordinator — You organize people and keep the team aligned.",
+innovator:"Innovator — You bring creative ideas and new perspectives.",
+motivator:"Motivator — You energize the team and keep morale high.",
+finisher:"Finisher — You ensure quality and attention to detail."
 }
 
-function updateProgress(){
-
-let progress=(currentQuestion/questions.length)*100;
-
-document.getElementById("progressBar").style.width=progress+"%";
-
+document.querySelector(".quiz-box").innerHTML=
+"<h2>Your team role:</h2><p>"+results[topRole]+"</p>"
 }
 
-function showResult(){
-
-document.getElementById("quiz").style.display="none";
-document.getElementById("result").style.display="block";
-
-let role=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
-
-const descriptions={
-
-creator:["Creator","You bring innovation and fresh ideas to the team."],
-analyst:["Analyst","You evaluate options carefully and think strategically."],
-connector:["Connector","You strengthen collaboration and relationships."],
-driver:["Driver","You push the team to act and achieve results."]
-
-};
-
-document.getElementById("roleTitle").innerText=descriptions[role][0];
-document.getElementById("roleDesc").innerText=descriptions[role][1];
-
-}
-
-function restartQuiz(){
-
-currentQuestion=0;
-
-scores={creator:0,analyst:0,connector:0,driver:0};
-
-document.getElementById("result").style.display="none";
-document.getElementById("quiz").style.display="block";
-
-loadQuestion();
-
-}
-
-loadQuestion();
+loadQuestion()
 
 </script>
 
